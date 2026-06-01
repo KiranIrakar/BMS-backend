@@ -1,4 +1,4 @@
 package com.BMS.BMS.service;
 
-public class Example {
+public interface UserService {
 }
