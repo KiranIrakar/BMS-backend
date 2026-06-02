@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .full_name(user.getFull_name())
                 .email(user.getEmail())
-                .mobile_number(user.getMobile_number())
+                .mobile_number(user.getMobileNumber())
                 .verified(user.getVerified())
                 .role(user.getRole())
                 .created_at(user.getCreated_at())
@@ -52,14 +52,14 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
-        if (userRepository.existsByMobile_number(dto.getMobile_number())) {
+        if (userRepository.existsByMobileNumber(dto.getMobile_number())) {
             throw new RuntimeException("Mobile number already registered");
         }
 
         User user = User.builder()
                 .full_name(dto.getFull_name())
                 .email(dto.getEmail())
-                .mobile_number(dto.getMobile_number())
+                .mobileNumber(dto.getMobile_number())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .verified(false)
                 .role("ROLE_USER")
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthResponseDto login(LoginRequestDto dto) {
         User user = userRepository
-                .findByEmailOrMobile_number(dto.getIdentifier(), dto.getIdentifier())
+                .findByEmailOrMobileNumber(dto.getIdentifier(), dto.getIdentifier())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void sendOtp(OtpRequestDto dto) {
         User user = userRepository
-                .findByMobile_number(dto.getMobile_number())
+                .findByMobileNumber(dto.getMobile_number())
                 .orElseThrow(() -> new RuntimeException("User not found with this mobile number"));
 
         String otp = generateOtp();
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public AuthResponseDto verifyOtp(OtpVerifyDto dto) {
         User user = userRepository
-                .findByMobile_number(dto.getMobile_number())
+                .findByMobileNumber(dto.getMobile_number())
                 .orElseThrow(() -> new RuntimeException("User not found with this mobile number"));
 
         if (user.getOtp() == null || !user.getOtp().equals(dto.getOtp())) {
@@ -135,14 +135,14 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
-        if (userRepository.existsByMobile_number(dto.getMobile_number())) {
+        if (userRepository.existsByMobileNumber(dto.getMobile_number())) {
             throw new RuntimeException("Mobile number already registered");
         }
 
         User user = User.builder()
                 .full_name(dto.getFull_name())
                 .email(dto.getEmail())
-                .mobile_number(dto.getMobile_number())
+                .mobileNumber(dto.getMobile_number())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .verified(false)
                 .role(dto.getRole() != null ? dto.getRole() : "ROLE_USER")
@@ -173,14 +173,14 @@ public class UserServiceImpl implements UserService {
         if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email already in use");
         }
-        if (!user.getMobile_number().equals(dto.getMobile_number())
-                && userRepository.existsByMobile_number(dto.getMobile_number())) {
+        if (!user.getMobileNumber().equals(dto.getMobile_number())
+                && userRepository.existsByMobileNumber(dto.getMobile_number())) {
             throw new RuntimeException("Mobile number already in use");
         }
 
         user.setFull_name(dto.getFull_name());
         user.setEmail(dto.getEmail());
-        user.setMobile_number(dto.getMobile_number());
+        user.setMobileNumber(dto.getMobile_number());
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(dto.getPassword()));

@@ -25,7 +25,7 @@ public class User {
     private String email;
 
     @Column(name = "mobile_number", unique = true)
-    private String mobile_number;
+    private String mobileNumber;
 
     private String password;
 
