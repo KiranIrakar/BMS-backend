@@ -11,11 +11,11 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByMobile_number(String mobile_number);
+    Optional<User> findByMobileNumber(String mobileNumber);
 
-    Optional<User> findByEmailOrMobile_number(String email, String mobile_number);
+    Optional<User> findByEmailOrMobileNumber(String email, String mobileNumber);
 
     boolean existsByEmail(String email);
 
-    boolean existsByMobile_number(String mobile_number);
+    boolean existsByMobileNumber(String mobileNumber);
 }

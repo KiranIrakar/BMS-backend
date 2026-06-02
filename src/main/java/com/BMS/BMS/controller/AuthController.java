@@ -15,6 +15,8 @@ public class AuthController {
 
     private final UserService userService;
 
+    // ── Signup & Login ───────────────────────────────────────────────────────
+
     // POST /api/auth/signup
     @PostMapping("/signup")
     public ResponseEntity<ApiResponseDto<AuthResponseDto>> signup(
@@ -33,5 +35,25 @@ public class AuthController {
 
         AuthResponseDto response = userService.login(dto);
         return ResponseEntity.ok(ApiResponseDto.success("Login successful", response));
+    }
+
+    // ── OTP ──────────────────────────────────────────────────────────────────
+
+    // POST /api/auth/otp/send
+    @PostMapping("/otp/send")
+    public ResponseEntity<ApiResponseDto<Void>> sendOtp(
+            @Valid @RequestBody OtpRequestDto dto) {
+
+        userService.sendOtp(dto);
+        return ResponseEntity.ok(ApiResponseDto.success("OTP sent successfully", null));
+    }
+
+    // POST /api/auth/otp/verify
+    @PostMapping("/otp/verify")
+    public ResponseEntity<ApiResponseDto<AuthResponseDto>> verifyOtp(
+            @Valid @RequestBody OtpVerifyDto dto) {
+
+        AuthResponseDto response = userService.verifyOtp(dto);
+        return ResponseEntity.ok(ApiResponseDto.success("OTP verified successfully", response));
     }
 }
