@@ -1,5 +1,6 @@
 package com.BMS.BMS.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,8 @@ public class UserResponseDto {
     private String mobile_number;
     private Boolean verified;
     private String role;
+    @JsonIgnore
     private LocalDateTime created_at;
+    @JsonIgnore
     private LocalDateTime updated_at;
 }

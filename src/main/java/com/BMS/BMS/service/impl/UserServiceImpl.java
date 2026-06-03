@@ -35,8 +35,6 @@ public class UserServiceImpl implements UserService {
                 .mobile_number(user.getMobileNumber())
                 .verified(user.getVerified())
                 .role(user.getRole())
-                .created_at(user.getCreated_at())
-                .updated_at(user.getUpdated_at())
                 .build();
     }
 
@@ -66,8 +64,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         user = userRepository.save(user);
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
-        return new AuthResponseDto(token, toResponseDto(user));
+        return new AuthResponseDto(null, toResponseDto(user));
     }
 
     @Override
