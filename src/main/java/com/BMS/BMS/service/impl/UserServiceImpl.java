@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
     private final JwtUtil jwtUtil;
 
     // ── Helpers ─────────────────────────────────────────────────────────────
@@ -54,6 +55,8 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Mobile number already registered");
         }
 
+        String otp = generateOtp();
+
         User user = User.builder()
                 .full_name(dto.getFull_name())
                 .email(dto.getEmail())
@@ -61,9 +64,16 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .verified(false)
                 .role("ROLE_USER")
+                .otp(otp)
+                .otp_expiry(LocalDateTime.now().plusMinutes(10))
                 .build();
 
         user = userRepository.save(user);
+
+        emailService.sendOtpEmail(
+                user.getEmail(),
+                otp,
+                user.getFull_name());
         return new AuthResponseDto(null, toResponseDto(user));
     }
 
@@ -76,7 +86,9 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
-
+        if (!user.getVerified()) {
+            throw new RuntimeException("Please verify your email first");
+        }
         String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
         return new AuthResponseDto(token, toResponseDto(user));
     }
@@ -95,8 +107,11 @@ public class UserServiceImpl implements UserService {
         user.setOtp_expiry(LocalDateTime.now().plusMinutes(10));
         userRepository.save(user);
 
-        // TODO: Integrate SMS gateway (Twilio / MSG91) to send OTP
-        // For now, log it (remove in production)
+        emailService.sendOtpEmail(
+                user.getEmail(),
+                otp,
+                user.getFull_name());
+
         log.info("OTP for {} : {}", dto.getMobile_number(), otp);
     }
 
@@ -143,6 +158,8 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .verified(false)
                 .role(dto.getRole() != null ? dto.getRole() : "ROLE_USER")
+                .created_at(LocalDateTime.now())   // add this
+                .updated_at(LocalDateTime.now())
                 .build();
 
         return toResponseDto(userRepository.save(user));
