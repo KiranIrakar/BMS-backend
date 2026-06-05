@@ -1,4 +1,4 @@
-package com.bms.config;
+package com.BMS.BMS.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,4 +13,5 @@ public class BrevoProperties {
 
     private String apiKey;
     private String fromEmail;
+    private String fromName = "BMS";
 }

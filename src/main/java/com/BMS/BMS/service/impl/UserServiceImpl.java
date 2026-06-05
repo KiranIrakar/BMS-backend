@@ -5,6 +5,7 @@ import com.BMS.BMS.models.User;
 import com.BMS.BMS.repository.UserRepository;
 import com.BMS.BMS.security.JwtUtil;
 import com.BMS.BMS.service.UserService;
+import com.BMS.BMS.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
