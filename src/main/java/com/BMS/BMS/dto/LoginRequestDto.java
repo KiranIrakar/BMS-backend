@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class LoginRequestDto {
 
     @NotBlank(message = "Email or mobile number is required")

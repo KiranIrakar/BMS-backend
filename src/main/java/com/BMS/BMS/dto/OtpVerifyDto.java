@@ -9,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
+
 public class OtpVerifyDto {
 
     @Pattern(regexp = "^[6-9]\\d{9}$", message = "Invalid mobile number")

@@ -10,6 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
+
 public class SignupRequestDto {
 
     @NotBlank(message = "Full name is required")
