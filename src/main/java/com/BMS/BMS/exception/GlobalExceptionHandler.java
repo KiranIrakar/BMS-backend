@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         }
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponseDto<>(false, "Validation failed", errors));
+                .body(new ApiResponseDto<Map<String, String>>(false, "Validation failed", errors));
     }
 
     // Business logic errors
