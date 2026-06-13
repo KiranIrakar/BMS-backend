@@ -41,9 +41,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private String generateOtp() {
-        return String.format("%06d", new Random().nextInt(999999));
+        return String.format("%04d", new Random().nextInt(10000));
     }
-
     // ── Auth ────────────────────────────────────────────────────────────────
 
     @Override
@@ -159,7 +158,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .verified(false)
                 .role(dto.getRole() != null ? dto.getRole() : "ROLE_USER")
-                .created_at(LocalDateTime.now())   // add this
+                .created_at(LocalDateTime.now()) // add this
                 .updated_at(LocalDateTime.now())
                 .build();
 

@@ -1,5 +1,6 @@
 package com.BMS.BMS.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Getter
@@ -12,6 +13,7 @@ public class ApiResponseDto<T> {
 
     private boolean success;
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public static <T> ApiResponseDto<T> success(String message, T data) {
@@ -19,6 +21,9 @@ public class ApiResponseDto<T> {
     }
 
     public static <T> ApiResponseDto<T> error(String message) {
-        return new ApiResponseDto<>(false, message, null);
+        return ApiResponseDto.<T>builder()
+                .success(false)
+                .message(message)
+                .build();
     }
 }
